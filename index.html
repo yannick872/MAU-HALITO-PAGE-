@@ -25,8 +25,10 @@
         <!-- VSL Section -->
         <section class="vsl-section">
             <div class="video-wrapper">
-                <video id="vsl-video" playsinline webkit-playsinline poster="">
-                    <source src="https://res.cloudinary.com/dl21wmmrf/video/upload/v1767876401/vsl_mau_halito.mp4"
+                <video id="vsl-video" playsinline webkit-playsinline preload="auto" poster="">
+                    <!-- URL Otimizada para evitar travamentos -->
+                    <source
+                        src="https://res.cloudinary.com/dl21wmmrf/video/upload/q_auto,vc_auto/v1767876401/vsl_mau_halito.mp4"
                         type="video/mp4">
                     Seu navegador não suporta vídeos HTML5.
                 </video>
