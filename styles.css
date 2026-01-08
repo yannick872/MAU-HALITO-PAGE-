@@ -24,6 +24,43 @@ body {
     padding: 0;
 }
 
+/* Page Header */
+.page-header {
+    text-align: center;
+    padding: 30px 16px 20px;
+    background: #ffffff;
+}
+
+.page-header h1 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 0;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.page-header h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin: 5px 0 15px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.page-header .subtitle {
+    font-size: 14px;
+    color: #65676b;
+    margin: 0;
+}
+
+.page-header .highlight {
+    color: #1a1a2e;
+    text-decoration: underline;
+    font-weight: 500;
+}
+
 /* VSL Section */
 .vsl-section {
     width: 100%;
