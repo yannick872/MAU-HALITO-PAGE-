@@ -61,6 +61,14 @@ body {
     font-weight: 500;
 }
 
+.text-green {
+    color: #22c55e;
+}
+
+.text-red {
+    color: #dc2626;
+}
+
 /* VSL Section */
 .vsl-section {
     width: 100%;
@@ -137,65 +145,6 @@ body {
     color: #fff;
     font-weight: 500;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-/* Video Controls - Estilo Vturb */
-.video-controls {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: rgba(0, 0, 0, 0.9);
-    padding: 8px 12px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    opacity: 1;
-}
-
-.control-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.control-btn svg {
-    width: 20px;
-    height: 20px;
-    fill: #fff;
-}
-
-.time-display {
-    font-size: 12px;
-    color: #fff;
-    white-space: nowrap;
-    flex-shrink: 0;
-}
-
-.progress-bar {
-    flex: 1;
-    height: 4px;
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 2px;
-    cursor: pointer;
-    position: relative;
-}
-
-.progress-fill {
-    height: 100%;
-    background: #fff;
-    border-radius: 2px;
-    width: 0%;
-    transition: width 0.1s linear;
-}
-
-.volume-btn {
-    flex-shrink: 0;
 }
 
 /* CTA Section */
