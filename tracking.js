@@ -55,6 +55,8 @@ sendEvent('PageView', pvId);
 
 // --- 2. TimeOnPage (Engajamento Temporal) ---
 let secondsActive = 0;
+let leadFired = false;
+
 setInterval(() => {
     secondsActive += 10;
     // Dispara eventos a cada 30 segundos, até 5 minutos (300s)
@@ -62,6 +64,16 @@ setInterval(() => {
         sendEvent('TimeOnPage', generateEventId(), {
             seconds_active: secondsActive,
             content_name: 'Sales Page Timer'
+        });
+    }
+
+    // LEAD: Dispara após 2 minutos na página (se ainda não disparou)
+    if (secondsActive >= 120 && !leadFired) {
+        leadFired = true;
+        sendEvent('Lead', generateEventId(), {
+            lead_type: 'time_on_page',
+            seconds_active: secondsActive,
+            content_name: 'VSL Engaged Visitor'
         });
     }
 }, 10000);
@@ -98,6 +110,16 @@ document.addEventListener('DOMContentLoaded', () => {
                         video_current_time: Math.floor(video.currentTime),
                         content_name: 'VSL Main Video'
                     });
+
+                    // LEAD via Vídeo: Quem viu 75%+ é lead quente
+                    if (mark == 75 && !leadFired) {
+                        leadFired = true;
+                        sendEvent('Lead', generateEventId(), {
+                            lead_type: 'video_75_percent',
+                            video_current_time: Math.floor(video.currentTime),
+                            content_name: 'Hot VSL Lead'
+                        });
+                    }
                 }
             });
         }
