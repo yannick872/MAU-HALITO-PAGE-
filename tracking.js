@@ -5,7 +5,7 @@ const PIXEL_ID = '882812227628158';
 !function (f, b, e, v, n, t, s) {
     if (f.fbq) return; n = f.fbq = function () {
         n.callMethod ?
-        n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            n.callMethod.apply(n, arguments) : n.queue.push(arguments)
     };
     if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
     n.queue = []; t = b.createElement(e); t.async = !0;
@@ -53,41 +53,71 @@ async function sendEvent(eventName, eventId, customData = {}) {
 const pvId = generateEventId();
 sendEvent('PageView', pvId);
 
-// 2. Monitoramento de Vídeo (VSL)
+// --- 2. TimeOnPage (Engajamento Temporal) ---
+let secondsActive = 0;
+setInterval(() => {
+    secondsActive += 10;
+    // Dispara eventos a cada 30 segundos, até 5 minutos (300s)
+    if (secondsActive > 0 && secondsActive % 30 === 0 && secondsActive <= 300) {
+        sendEvent('TimeOnPage', generateEventId(), {
+            seconds_active: secondsActive,
+            content_name: 'Sales Page Timer'
+        });
+    }
+}, 10000);
+
+
+// --- 3. Monitoramento de Vídeo (VSL Avançado) ---
 document.addEventListener('DOMContentLoaded', () => {
     const video = document.getElementById('vsl-video');
     if (!video) return;
 
     let hasViewedContent = false;
-    let progressMarkers = { 25: false, 50: false, 75: false, 100: false };
+    // Marcos de progresso para funil de vídeo
+    let markers = { 10: false, 25: false, 50: false, 75: false, 95: false };
 
     video.addEventListener('timeupdate', () => {
         if (video.duration) {
-            const percent = (video.currentTime / video.duration) * 100;
+            const pct = (video.currentTime / video.duration) * 100;
 
-            // ViewContent (Consideramos visualização após 3 segundos de vídeo)
-            if (video.currentTime > 3 && !hasViewedContent) {
+            // ViewContent: Conta como visualização real após 5 segundos
+            if (video.currentTime > 5 && !hasViewedContent) {
                 hasViewedContent = true;
-                sendEvent('ViewContent', generateEventId(), { content_name: 'VSL Main Video' });
+                sendEvent('ViewContent', generateEventId(), {
+                    content_name: 'VSL Main Video',
+                    content_category: 'Video Sales Letter'
+                });
             }
 
-            // Marcos de Progresso (Custom Events)
-            if (percent > 25 && !progressMarkers[25]) {
-                progressMarkers[25] = true;
-                // Exemplo: VideoView25% como custom event se desejado, ou apenas sinal interno
-            }
+            // VideoProgress: Dispara nos marcos definidos
+            Object.keys(markers).forEach(mark => {
+                if (pct >= mark && !markers[mark]) {
+                    markers[mark] = true;
+                    sendEvent('VideoProgress', generateEventId(), {
+                        percentage: mark,
+                        video_current_time: Math.floor(video.currentTime),
+                        content_name: 'VSL Main Video'
+                    });
+                }
+            });
         }
     });
 
-    // 3. InitiateCheckout (Botão de Compra)
-    // Monitora cliques em qualquer link que pareça de checkout ou o botão CTA específico
+    // Rastreia Play inicial
+    video.addEventListener('play', () => {
+        // Opcional: Evitar flood se o usuário der play/pause várias vezes
+    }, { once: true });
+
+    // --- 4. InitiateCheckout (Botão de Compra) ---
+    // Monitora cliques no CTA e Links de pagamento
     document.addEventListener('click', (e) => {
         const btn = e.target.closest('.cta-button, .checkout-link, a[href*="pay"], a[href*="checkout"]');
         if (btn) {
             sendEvent('InitiateCheckout', generateEventId(), {
                 content_name: 'Protocolo Hálito Renovado',
                 value: 197.00,
-                currency: 'MZN'
+                currency: 'MZN',
+                content_type: 'product'
             });
         }
     });
