@@ -6,9 +6,8 @@ const CHECKOUT_URL = '#'; // Substitua pelo link do checkout
 const video = document.getElementById('vsl-video');
 const playOverlay = document.getElementById('play-overlay');
 const playButton = document.getElementById('play-button');
-const videoControls = document.getElementById('video-controls');
 const playPauseBtn = document.getElementById('play-pause');
-const muteBtn = document.getElementById('mute-btn');
+const volumeBtn = document.getElementById('volume-btn');
 const progressBar = document.getElementById('progress-bar');
 const progressFill = document.getElementById('progress-fill');
 const timeDisplay = document.getElementById('time-display');
@@ -17,7 +16,6 @@ const ctaButton = document.getElementById('cta-button');
 
 // Estado
 let ctaShown = false;
-let controlsTimeout;
 
 // Atualizar link do checkout
 ctaButton.href = CHECKOUT_URL;
@@ -48,7 +46,7 @@ function togglePlayPause() {
 function updatePlayPauseIcon() {
     const iconPlay = playPauseBtn.querySelector('.icon-play');
     const iconPause = playPauseBtn.querySelector('.icon-pause');
-    
+
     if (video.paused) {
         iconPlay.style.display = 'block';
         iconPause.style.display = 'none';
@@ -66,9 +64,9 @@ function toggleMute() {
 
 // Atualizar ícone de volume
 function updateMuteIcon() {
-    const iconVolume = muteBtn.querySelector('.icon-volume');
-    const iconMuted = muteBtn.querySelector('.icon-muted');
-    
+    const iconVolume = volumeBtn.querySelector('.icon-volume');
+    const iconMuted = volumeBtn.querySelector('.icon-muted');
+
     if (video.muted) {
         iconVolume.style.display = 'none';
         iconMuted.style.display = 'block';
@@ -83,7 +81,7 @@ function updateProgress() {
     const progress = (video.currentTime / video.duration) * 100;
     progressFill.style.width = `${progress}%`;
     timeDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
-    
+
     // Mostrar CTA após o tempo definido
     if (video.currentTime >= CTA_SHOW_TIME && !ctaShown) {
         ctaSection.style.display = 'block';
@@ -96,18 +94,6 @@ function seekVideo(e) {
     const rect = progressBar.getBoundingClientRect();
     const percent = (e.clientX - rect.left) / rect.width;
     video.currentTime = percent * video.duration;
-}
-
-// Mostrar/esconder controles
-function showControls() {
-    videoControls.classList.add('visible');
-    clearTimeout(controlsTimeout);
-    
-    if (!video.paused) {
-        controlsTimeout = setTimeout(() => {
-            videoControls.classList.remove('visible');
-        }, 3000);
-    }
 }
 
 // Event Listeners
@@ -126,27 +112,12 @@ video.addEventListener('loadedmetadata', () => {
 });
 
 playPauseBtn.addEventListener('click', togglePlayPause);
-muteBtn.addEventListener('click', toggleMute);
+volumeBtn.addEventListener('click', toggleMute);
 progressBar.addEventListener('click', seekVideo);
 
-// Controles hover
-document.querySelector('.video-wrapper').addEventListener('mousemove', showControls);
-document.querySelector('.video-wrapper').addEventListener('mouseleave', () => {
-    if (!video.paused) {
-        videoControls.classList.remove('visible');
-    }
-});
-
 // Tocar vídeo ao clicar na área (mobile)
-video.addEventListener('touchstart', () => {
+video.addEventListener('touchstart', (e) => {
     if (playOverlay.classList.contains('hidden')) {
-        showControls();
+        togglePlayPause();
     }
 });
-
-// Prevenir scroll durante reprodução em tela cheia mobile
-document.addEventListener('touchmove', (e) => {
-    if (document.fullscreenElement) {
-        e.preventDefault();
-    }
-}, { passive: false });
