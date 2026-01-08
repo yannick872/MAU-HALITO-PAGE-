@@ -1,5 +1,5 @@
 // Configurações - ALTERE AQUI O TEMPO DO BOTÃO
-const CTA_SHOW_TIME = 60; // Tempo em segundos para mostrar o botão CTA
+const CTA_SHOW_TIME = 188; // Tempo em segundos para mostrar o botão CTA (3:08)
 const CHECKOUT_URL = 'https://pay.lojou.app/p/LuD6c'; // Link do checkout
 
 // Elementos
